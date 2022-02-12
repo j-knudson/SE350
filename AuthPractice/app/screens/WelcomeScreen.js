@@ -1,26 +1,42 @@
 import React, {useState} from 'react';
-import {ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View, Image} from 'react-native';
+import {
+    Alert,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+    Image,
+} from 'react-native';
+import LandingScreen from "./LandingScreen";
 
 
 
-function WelcomeScreen(props) {
+//function WelcomeScreen() {
+const WelcomeScreen = ({navigation}) => {
+
     const [email, setEmail] = useState('');
     const [password, setPassword] =  useState('');
+    const onLoginPress = () => {
+        Alert.alert('Login Press', "You pressed the log me in button")
+        navigation.navigate('Landing', {
+            itemID : email,
+            newEmail: password,
+            testString: 'This is my test message'
+        });
+    }
     return (
         <ImageBackground
             resizeMode={"contain"}
             style={styles.background}
             source={require('../assets/rebel_empire.jpg')}
         >
-
-            <Image style={styles.logo} source={require('../assets/crossed_sabers.jpg')} resizeMode={"contain"}/>
-
-{/*            <View style={styles.logo}>
-                <Image
-                    style={styles.loginButton}
-                    source={require('../assets/crossed_sabers.jpg')}
-                    resizeMode={"contain"}/>
-            </View>*/}
+            <View style={styles.container}>
+                <TouchableOpacity onPress={()=> onLoginPress()}>
+                    <Image style={{width: 50, height: 50}} source={require('../assets/crossed_sabers.jpg')} />
+                </TouchableOpacity>
+            </View>
             <View style={styles.loginEmailButton}>
                 <TextInput
                     style={styles.text}
@@ -33,10 +49,15 @@ function WelcomeScreen(props) {
                     style={styles.text}
                     placeholder ="Code Clearance"
                     secureTextEntry={true}
-                    onChangeText={(email) => setPassword(email)}
+                    onChangeText={(password) => setPassword(password)}
+                    onKeyPress = {event =>  {
+                      if (event.key === 'Enter') {
+                          navigation.navigate("Landing")
+                      }
+                    }}
                 />
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> navigation.navigate('Forgot')}>
                 <Text style={styles.forgotText}> Forgot Clearance Code?</Text>
             </TouchableOpacity>
         </ImageBackground>
@@ -51,6 +72,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         justifyContent: "flex-end",
         alignItems: "center",
+    },
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      backgroundColor: 'blue',
+      position: "absolute",
+      top: 50,
     },
     forgotPassword: {
         width: '100%',
@@ -80,14 +108,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'limegreen',
     },
     logo: {
+      resizeMode: "contain",
       width: '25%',
       height: '25%',
-      position: 'absolute',
-      top: 50,
+      //position: 'absolute',
+      //top: 50,
     },
     text: {
         color: "white",
-        fontSize: 42,
+        fontSize: 32,
         lineHeight: 84,
         fontWeight: "bold",
         textAlign: "center",
